@@ -5,22 +5,29 @@ import Link from "@/Pages/Auth/Components/Link";
 import Card from "@/Pages/Auth/Components/Card";
 import Heading from "@/Pages/Auth/Components/Heading";
 import Form from "@/Pages/Auth/Components/Form";
+import { toastSuccess, toastError } from "@/Utils/Helpers/ToastHelpers";
+
 
 import { dummyUser } from "@/Data/Dummy";
 
 const Login = () => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    const email = e.target.email.value;
-    const password = e.target.password.value;
+ const handleSubmit = (e) => {
+  e.preventDefault();
+  // eslint-disable-next-line no-undef
+  const { email, password } = form;
 
-    if (email === dummyUser.email && password === dummyUser.password) {
-      localStorage.setItem("user", JSON.stringify(dummyUser));
-      window.location.href = "/admin";
-    } else {
-      alert("Email atau password salah!");
-    }
-  };
+  if (email === dummyUser.email && password === dummyUser.password) {
+    localStorage.setItem("user", JSON.stringify(dummyUser));
+    toastSuccess("Login berhasil!");
+    // eslint-disable-next-line no-undef
+    navigate("/admin/dashboard");
+  } else {
+    toastError("Email atau password salah!");
+  }
+};
+
+  
+
 
   return (
       <Card className="max-w-md">

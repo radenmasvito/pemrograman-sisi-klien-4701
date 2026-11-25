@@ -1,14 +1,39 @@
-import Card from "@/Pages/Admin/Components/Card";
-import Heading from "@/Pages/Admin/Components/Heading";
+//import Card from "@/Pages/Admin/Components/Card";
+//import Heading from "@/Pages/Admin/Components/Heading";
+import { getMahasiswa } from "@/Utils/Apis/MahasiswaApi";
+import { toastError } from "@/Utils/Helpers/ToastHelpers";
 
-import { mahasiswaList } from "@/Data/Dummy";
+//import { mahasiswaList } from "@/Data/Dummy";
 
 const MahasiswaDetail = () => {
 
-  const path = window.location.pathname;
-  const nim = path.split("/").pop();
+    const { id } = useParams();
+  const [mahasiswa, setMahasiswa] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  const mahasiswa = mahasiswaList.find((m) => m.nim === nim);
+  useEffect(() => {
+    fetchMahasiswa();
+  }, [id]);
+  
+  const fetchMahasiswa = async () => {
+    try {
+      const res = await getMahasiswa(id);
+      setMahasiswa(res.data);
+    } catch (err) {
+      toastError("Gagal mengambil data mahasiswa: ", err);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  if (loading) return <p className="text-center">Memuat data...</p>;
+
+  if (!mahasiswa) return <p className="text-center">Data tidak ditemukan</p>;
+  
+  //const path = window.location.pathname;
+  //const nim = path.split("/").pop();
+
+  /*const mahasiswa = mahasiswaList.find((m) => m.nim === nim);
 
   if (!mahasiswa) {
     return <p className="text-red-600">Data mahasiswa tidak ditemukan.</p>;
@@ -30,7 +55,7 @@ const MahasiswaDetail = () => {
         </tbody>
       </table>
     </Card>
-  );
+  );*/
 };
 
 export default MahasiswaDetail;
